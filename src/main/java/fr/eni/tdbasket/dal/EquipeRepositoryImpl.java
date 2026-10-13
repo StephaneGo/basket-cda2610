@@ -13,6 +13,7 @@ public class EquipeRepositoryImpl implements EquipeRepository{
 
     EquipeRepositoryImpl(){
         equipes = new ArrayList<>();
+        equipes.add(new Equipe(1, "U18F1"));
 
     }
 
