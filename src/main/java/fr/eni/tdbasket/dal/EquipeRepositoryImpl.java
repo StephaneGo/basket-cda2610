@@ -11,14 +11,23 @@ public class EquipeRepositoryImpl implements EquipeRepository{
 
     private List<Equipe> equipes;
 
+    private static int compteurEquipe =0;
+
     EquipeRepositoryImpl(){
         equipes = new ArrayList<>();
-        equipes.add(new Equipe(1, "U18F1"));
 
     }
 
     @Override
     public List<Equipe> findAllEquipes() {
         return equipes;
+    }
+
+    @Override
+    public Equipe saveEquipe(Equipe equipe){
+        compteurEquipe++;
+        equipe.setNoEquipe(compteurEquipe);
+        equipes.add(equipe);
+        return equipe;
     }
 }

@@ -8,4 +8,6 @@ public interface EquipeRepository {
 
     List<Equipe> findAllEquipes();
 
+    Equipe saveEquipe(Equipe equipe);
+
 }

@@ -23,8 +23,12 @@ public class EquipeServiceImpl implements EquipeService {
         return equipes;
     }
 
+    @Override
+    public Equipe ajouterEquipe(Equipe nouvelleEquipe){
+        //
 
-
+        return equipeRepository.saveEquipe(nouvelleEquipe);
+    }
 
 
 }

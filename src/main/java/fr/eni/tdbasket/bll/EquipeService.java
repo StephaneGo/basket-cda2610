@@ -7,4 +7,7 @@ import java.util.List;
 public interface EquipeService {
 
     List<Equipe> trouverEquipes();
+
+    Equipe ajouterEquipe(Equipe nouvelleEquipe);
+
 }
