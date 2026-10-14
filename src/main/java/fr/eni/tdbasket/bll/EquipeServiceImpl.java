@@ -3,6 +3,7 @@ package fr.eni.tdbasket.bll;
 
 import fr.eni.tdbasket.bo.Equipe;
 import fr.eni.tdbasket.dal.EquipeRepository;
+import fr.eni.tdbasket.dto.EquipeDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +25,11 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public Equipe ajouterEquipe(Equipe nouvelleEquipe){
-        //
+    public Equipe ajouterEquipe(EquipeDto nouvelleEquipe){
+        // Transformation du DTO en BO
+        Equipe newEquipe = new Equipe(nouvelleEquipe.getNom());
 
-        return equipeRepository.saveEquipe(nouvelleEquipe);
+        return equipeRepository.saveEquipe(newEquipe);
     }
 
 
