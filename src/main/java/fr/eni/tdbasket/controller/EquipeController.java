@@ -27,9 +27,12 @@ public class EquipeController {
 
 
     @PostMapping("/equipes")
-    public ResponseEntity<Equipe> addEquipe(@RequestParam(name = "nom") String nom){
+    //public ResponseEntity<Equipe> addEquipe(@RequestParam(name = "nom") String nom){
+    //public ResponseEntity<Equipe> addEquipe(@RequestParam String nom){
+    public ResponseEntity<Equipe> addEquipe(@RequestBody Equipe equipe){
 
-        System.out.println("nom: " + nom);
+        System.out.println("nom: " + equipe.getNom());
+
         return null;
     }
 
