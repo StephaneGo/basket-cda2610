@@ -3,6 +3,7 @@ package fr.eni.tdbasket.controller;
 import fr.eni.tdbasket.bll.EquipeService;
 import fr.eni.tdbasket.bo.Equipe;
 import fr.eni.tdbasket.dto.EquipeDto;
+import fr.eni.tdbasket.exception.EquipeNotFound;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -45,6 +46,33 @@ public class EquipeController {
                 .status(HttpStatus.CREATED)
                 .body(equipe);
     }
+
+
+    @DeleteMapping("/equipes")
+    public ResponseEntity<Void> supprimerEquipeParNumero(@RequestParam int noEquipe){
+        try{
+            equipeService.supprimerEquipe(noEquipe);
+        }catch (EquipeNotFound enf){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
+
+    @DeleteMapping("/equipes/{noEquipe}")
+    public ResponseEntity<Void> supprimerEquipeParNumeroAvecPathVariable(
+            @PathVariable("noEquipe") int noEquipe){
+        try{
+            equipeService.supprimerEquipe(noEquipe);
+        }catch (EquipeNotFound enf){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
+
 
 
 

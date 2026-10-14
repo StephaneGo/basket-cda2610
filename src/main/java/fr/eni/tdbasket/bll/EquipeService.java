@@ -11,4 +11,5 @@ public interface EquipeService {
 
     Equipe ajouterEquipe(EquipeDto nouvelleEquipe);
 
+    void supprimerEquipe(int noEquipe);
 }

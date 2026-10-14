@@ -4,6 +4,7 @@ package fr.eni.tdbasket.bll;
 import fr.eni.tdbasket.bo.Equipe;
 import fr.eni.tdbasket.dal.EquipeRepository;
 import fr.eni.tdbasket.dto.EquipeDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,10 +28,16 @@ public class EquipeServiceImpl implements EquipeService {
     @Override
     public Equipe ajouterEquipe(EquipeDto nouvelleEquipe){
         // Transformation du DTO en BO
-        Equipe newEquipe = new Equipe(nouvelleEquipe.getNom());
+        //Equipe newEquipe = new Equipe(nouvelleEquipe.getNom());
+        Equipe newEquipe = new Equipe();
+        BeanUtils.copyProperties(nouvelleEquipe, newEquipe);
 
         return equipeRepository.saveEquipe(newEquipe);
     }
 
+    @Override
+    public void supprimerEquipe(int noEquipe){
+        equipeRepository.deleteEquipe(noEquipe);
+    }
 
 }

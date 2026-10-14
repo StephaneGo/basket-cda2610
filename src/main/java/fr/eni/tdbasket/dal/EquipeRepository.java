@@ -10,4 +10,5 @@ public interface EquipeRepository {
 
     Equipe saveEquipe(Equipe equipe);
 
+    void deleteEquipe(int noEquipe);
 }
