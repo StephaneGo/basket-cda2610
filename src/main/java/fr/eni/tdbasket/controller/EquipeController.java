@@ -2,6 +2,7 @@ package fr.eni.tdbasket.controller;
 
 import fr.eni.tdbasket.bll.EquipeService;
 import fr.eni.tdbasket.bo.Equipe;
+import fr.eni.tdbasket.dto.EquipeDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,9 @@ public class EquipeController {
     @PostMapping("/equipes")
     //public ResponseEntity<Equipe> addEquipe(@RequestParam(name = "nom") String nom){
     //public ResponseEntity<Equipe> addEquipe(@RequestParam String nom){
-    public ResponseEntity<Equipe> addEquipe(@RequestBody Equipe equipe){
+    public ResponseEntity<Equipe> addEquipe(@RequestBody EquipeDto equipeDto){
 
-        System.out.println("nom: " + equipe.getNom());
+        System.out.println("nom: " + equipeDto.getNom());
 
         return null;
     }
