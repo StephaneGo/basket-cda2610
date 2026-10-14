@@ -21,8 +21,13 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
