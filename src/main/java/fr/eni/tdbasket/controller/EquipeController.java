@@ -62,7 +62,7 @@ public class EquipeController {
 
     @DeleteMapping("/equipes/{noEquipe}")
     public ResponseEntity<Void> supprimerEquipeParNumeroAvecPathVariable(
-            @PathVariable("noEquipe") int noEquipe){
+            @PathVariable int noEquipe){
         try{
             equipeService.supprimerEquipe(noEquipe);
         }catch (EquipeNotFound enf){
