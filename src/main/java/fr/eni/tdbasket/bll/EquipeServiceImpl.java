@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EquipeServiceImpl implements EquipeService {
@@ -27,6 +28,11 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public Optional<Equipe> findByNom(String nom) {
+        return equipeRepository.findByNom(nom);
+    }
+
+    @Override
     public Equipe ajouterEquipe(EquipeDto nouvelleEquipe){
         // Transformation du DTO en BO
         //Equipe newEquipe = new Equipe(nouvelleEquipe.getNom());
@@ -38,7 +44,7 @@ public class EquipeServiceImpl implements EquipeService {
 
     @Override
     public void supprimerEquipe(int noEquipe)  {
-        equipeRepository.deleteEquipe(noEquipe);
+        equipeRepository.deleteEquipeByNo(noEquipe);
     }
 
 }

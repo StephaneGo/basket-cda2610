@@ -1,9 +1,23 @@
 package fr.eni.tdbasket.dal;
 
 import fr.eni.tdbasket.bo.Equipe;
+import fr.eni.tdbasket.exception.EquipeDejaExistante;
 import fr.eni.tdbasket.exception.EquipeNotFound;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,37 +25,83 @@ import java.util.Optional;
 @Repository
 public class EquipeRepositoryImpl implements EquipeRepository{
 
-    private List<Equipe> equipes;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-    private static int compteurEquipe =0;
+    public EquipeRepositoryImpl(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-    EquipeRepositoryImpl(){
-        equipes = new ArrayList<>();
 
+    class EquipeRowMapper implements RowMapper<Equipe> {
+
+        @Override
+        public Equipe mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Equipe equipe = new Equipe();
+            equipe.setNoEquipe(rs.getInt("id"));
+            equipe.setNom(rs.getString("nom"));
+            return equipe;
+        }
     }
 
     @Override
     public List<Equipe> findAllEquipes() {
+        String sql = "select id, nom from equipes";
+        List<Equipe> equipes = jdbcTemplate.query(sql, new EquipeRowMapper());
+
         return equipes;
     }
 
+
+
+
     @Override
-    public Equipe saveEquipe(Equipe equipe){
-        compteurEquipe++;
-        equipe.setNoEquipe(compteurEquipe);
-        equipes.add(equipe);
-        return equipe;
+    public Optional<Equipe> findByNom(String nom) {
+        String sql = "select id, nom from equipes where nom = ?";
+        Optional<Equipe> optEquipe;
+        try{
+            optEquipe = Optional.ofNullable(jdbcTemplate.queryForObject(sql, new EquipeRowMapper(), nom));
+        }catch(EmptyResultDataAccessException e){
+            optEquipe = Optional.empty();
+        }
+
+        return optEquipe;
     }
 
     @Override
-    public void deleteEquipe(int noEquipe)
-    {
-        Optional<Equipe> optEquipe = equipes.stream().filter(equipe -> equipe.getNoEquipe()==noEquipe).findFirst();
+    public Equipe saveEquipe(Equipe equipe)  {
+        //ajout
+        String sql = "insert into equipes ( nom) values ( ?)";
 
-        if(optEquipe.isEmpty()){
+        Equipe newEquipe;
+        //KeyHolder permet de récupérer la clé primaire générée par la base
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        try {
+            jdbcTemplate.update(sql, keyHolder, equipe.getNom());
+            newEquipe = new Equipe();
+            BeanUtils.copyProperties(equipe, newEquipe);
+            newEquipe.setNoEquipe(keyHolder.getKeyAs(Integer.class));
+        }catch(DuplicateKeyException exc){
+            throw new EquipeDejaExistante(equipe.getNom());
+        }
+        return newEquipe;
+    }
+
+    @Override
+    public void deleteEquipeByNom(String nom) {
+        String sql = "delete from equipes where nom = ?";
+        int nbRows = jdbcTemplate.update(sql, nom);
+        if(nbRows==0){
+            throw new EquipeNotFound(nom);
+        }
+    }
+
+    @Override
+    public void deleteEquipeByNo(int noEquipe) {
+        String sql = "delete from equipes where id = ?";
+        int nbRows = jdbcTemplate.update(sql, noEquipe);
+        if(nbRows==0){
             throw new EquipeNotFound(noEquipe);
         }
-
-        equipes.remove(optEquipe.get());
     }
 }

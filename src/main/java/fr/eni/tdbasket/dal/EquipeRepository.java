@@ -3,6 +3,7 @@ package fr.eni.tdbasket.dal;
 import fr.eni.tdbasket.bo.Equipe;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EquipeRepository {
 
@@ -10,5 +11,11 @@ public interface EquipeRepository {
 
     Equipe saveEquipe(Equipe equipe);
 
-    void deleteEquipe(int noEquipe);
+
+    void deleteEquipeByNo(int noEquipe);
+
+
+    Optional<Equipe> findByNom(String nom);
+
+    void deleteEquipeByNom(String nom);
 }

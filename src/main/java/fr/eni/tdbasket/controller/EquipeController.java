@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EquipeController {
@@ -27,6 +28,16 @@ public class EquipeController {
         List<Equipe> equipes = equipeService.trouverEquipes();
         return ResponseEntity.status(HttpStatus.OK)
                 .body(equipes);
+    }
+
+    @GetMapping("/equipes/find")
+    public ResponseEntity<Equipe> findEquipeByNom(@RequestParam String nom){
+        Optional<Equipe> equipe = equipeService.findByNom(nom);
+
+        if(equipe.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(equipe.get());
     }
 
 
