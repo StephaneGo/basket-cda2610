@@ -76,10 +76,17 @@ public class EquipeRepositoryImpl implements EquipeRepository{
         //KeyHolder permet de récupérer la clé primaire générée par la base
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
-            jdbcTemplate.update(sql, keyHolder, equipe.getNom());
+            jdbcTemplate.update(
+                    connection -> {
+                        PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                        ps.setString(1, equipe.getNom());
+                        return ps;
+                    },
+                    keyHolder
+            );
             newEquipe = new Equipe();
             BeanUtils.copyProperties(equipe, newEquipe);
-            newEquipe.setNoEquipe(keyHolder.getKeyAs(Integer.class));
+            newEquipe.setNoEquipe(keyHolder.getKey().intValue());
         }catch(DuplicateKeyException exc){
             throw new EquipeDejaExistante(equipe.getNom());
         }

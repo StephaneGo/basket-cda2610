@@ -12,7 +12,7 @@ create table JOUEURS(
 	prenom varchar(30) not null,
 	nom  varchar(30) not null,
 	email varchar(30) null,
-	noEquipe int not null)
+	noEquipe int null)
 
 alter table JOUEURS 
 add foreign key (noEquipe) references EQUIPES(noEquipe)
