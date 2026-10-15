@@ -25,7 +25,6 @@ import java.util.Optional;
 @Repository
 public class EquipeRepositoryImpl implements EquipeRepository{
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public EquipeRepositoryImpl(JdbcTemplate jdbcTemplate){
@@ -38,7 +37,7 @@ public class EquipeRepositoryImpl implements EquipeRepository{
         @Override
         public Equipe mapRow(ResultSet rs, int rowNum) throws SQLException {
             Equipe equipe = new Equipe();
-            equipe.setNoEquipe(rs.getInt("id"));
+            equipe.setNoEquipe(rs.getInt("noEquipe"));
             equipe.setNom(rs.getString("nom"));
             return equipe;
         }
@@ -46,7 +45,7 @@ public class EquipeRepositoryImpl implements EquipeRepository{
 
     @Override
     public List<Equipe> findAllEquipes() {
-        String sql = "select id, nom from equipes";
+        String sql = "select noEquipe, nom from equipes";
         List<Equipe> equipes = jdbcTemplate.query(sql, new EquipeRowMapper());
 
         return equipes;
@@ -57,7 +56,7 @@ public class EquipeRepositoryImpl implements EquipeRepository{
 
     @Override
     public Optional<Equipe> findByNom(String nom) {
-        String sql = "select id, nom from equipes where nom = ?";
+        String sql = "select noEquipe, nom from equipes where nom = ?";
         Optional<Equipe> optEquipe;
         try{
             optEquipe = Optional.ofNullable(jdbcTemplate.queryForObject(sql, new EquipeRowMapper(), nom));
@@ -98,7 +97,7 @@ public class EquipeRepositoryImpl implements EquipeRepository{
 
     @Override
     public void deleteEquipeByNo(int noEquipe) {
-        String sql = "delete from equipes where id = ?";
+        String sql = "delete from equipes where noEquipe = ?";
         int nbRows = jdbcTemplate.update(sql, noEquipe);
         if(nbRows==0){
             throw new EquipeNotFound(noEquipe);

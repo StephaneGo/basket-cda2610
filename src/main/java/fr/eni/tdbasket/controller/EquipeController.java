@@ -30,7 +30,7 @@ public class EquipeController {
                 .body(equipes);
     }
 
-    @GetMapping("/equipes/find")
+    @GetMapping(path="/equipes", params = "nom")
     public ResponseEntity<Equipe> findEquipeByNom(@RequestParam String nom){
         Optional<Equipe> equipe = equipeService.findByNom(nom);
 
